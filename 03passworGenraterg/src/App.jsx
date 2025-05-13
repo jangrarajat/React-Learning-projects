@@ -1,6 +1,4 @@
 import { useState, useCallback, useEffect , useRef} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
@@ -41,20 +39,22 @@ let passwordRef = useRef(null)
 
   return (
     <>
-      <div id="mainBox" style={{ width: 500, minHeight: 100, backgroundColor: 'white', borderRadius: 5, }}>
+      <div id="mainBox" style={{ width: 500, minHeight: 100, borderRadius: 20, }}>
         <h2 style={{ color: 'black' }}>Password Generator</h2>
         <input type="text" 
         placeholder='Password' 
         value={password} readOnly 
         ref = {passwordRef}
-        style={{ width: 400, color: 'white' }} />
+        style={{ width: 380, color: 'white', 
+          height:30
+        }} />
 
        <br />
         <br />
-        <input type="range" name="range" id="" min={6} max={100} value={lenth}
+        <input type="range" name="range" id="" min={6} max={50} value={lenth}
           onChange={(e) => { setLenth(e.target.value) }}
 
-          style={{ width: 300, cursor: 'pointer' }} />
+          style={{ width: 260, cursor: 'pointer' }} />
         <label htmlFor="range" >Password Lenth {lenth}</label>
         <br />
 

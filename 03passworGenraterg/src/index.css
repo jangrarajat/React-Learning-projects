@@ -28,6 +28,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-image: url(/pic.jpg);
+  background-size: cover;
 }
 
 h1 {
