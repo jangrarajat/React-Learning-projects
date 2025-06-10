@@ -8,6 +8,9 @@ body {
 font-family: Arial, Helvetica, sans-serif;
 }
 
+h1{
+ color: rgb(0, 98, 255);
+}
 
 .dataDiv {
   height: 96px;

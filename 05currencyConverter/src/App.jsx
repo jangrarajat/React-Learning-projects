@@ -28,7 +28,9 @@ function App() {
   return (
     <>
       <div id="main">
-        <h1 style={{color:'grey',fontSize:40 , fontWeight:'bolder'}}>Convert <span>{from}</span> To <span>{to}</span></h1>
+              
+
+        <h1 id='heading' style={{fontSize:30 , fontWeight:'bolder'}}> CONVERT <span>{from.toLocaleUpperCase()}</span> To <span>{convertedAmount}{to.toLocaleUpperCase()}</span></h1>
 
         <div className="dataDiv">
           <div className="titleDiv">
