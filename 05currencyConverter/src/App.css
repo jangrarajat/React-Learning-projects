@@ -1,0 +1,88 @@
+body {
+  background-image: url('background.png');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.dataDiv {
+  height: 96px;
+  width: 98%;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid rgb(0, 0, 0);
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+align-items: center;
+}
+
+#convertor {
+
+  height: 300px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+#convert
+ {
+  width: 97%;
+  height: 19%;
+  background-color: rgb(0, 98, 255);
+border: none;
+  border-radius: 5px;
+  color: white;
+}
+
+#swap {
+  color: white;
+  height: 2rem;
+  width: 6rem;
+  position: absolute;
+  top: 102px;
+  background-color: rgb(0, 98, 255);
+border: 2px solid white;
+  border-radius: 8px;
+}
+
+#main {
+
+  margin-top: 4rem;
+  background-color: rgba(255, 255, 255, 0.3); 
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px); 
+ border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 35rem;
+  height: 20rem;
+
+}
+.titleDiv{
+ width: 93%;
+ height: 40%;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+padding: 1px;
+
+}
+.inputMoney{
+  border: none;
+}
+#options{
+  width: 6rem;
+  border: none;
+}
+span{
+  margin-left: 5px;
+  margin-right: 5px;
+}
