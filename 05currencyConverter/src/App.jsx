@@ -3,7 +3,7 @@ import './App.css'
 import useCurrencyInfo from './hooks/currency info'
 
 function App() {
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState()
   const [from, setFrom] = useState("usd")
   const [to, setTo] = useState("inr")
   const [convertedAmount, setConvertedAmount] = useState(0)
@@ -30,7 +30,7 @@ function App() {
       <div id="main">
               
 
-        <h1 id='heading' style={{fontSize:30 , fontWeight:'bolder'}}> CONVERT <span>{from.toLocaleUpperCase()}</span> To <span>{convertedAmount}{to.toLocaleUpperCase()}</span></h1>
+        <h1 id='heading' style={{fontSize:30 , fontWeight:'bolder'}}> CONVERT <span>{from.toLocaleUpperCase()}</span> To <span> {convertedAmount} {to.toLocaleUpperCase()}</span></h1>
 
         <div className="dataDiv">
           <div className="titleDiv">
@@ -42,6 +42,7 @@ function App() {
               id='input'
               type="number"
               value={amount}
+              placeholder='0'
               onChange={e => setAmount(Number(e.target.value))}
             />
             <select
@@ -65,6 +66,7 @@ function App() {
               type="number"
               value={convertedAmount}
               readOnly
+              placeholder='0'
             />
             <select
               value={to}

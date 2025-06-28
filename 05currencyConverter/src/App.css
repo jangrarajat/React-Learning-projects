@@ -1,5 +1,5 @@
 body {
-  background-image: url('background.png');
+  background-image: url('./background.jpg');
   background-size: cover;
   display: flex;
   flex-direction: column;
@@ -9,13 +9,16 @@ font-family: Arial, Helvetica, sans-serif;
 }
 
 h1{
- color: rgb(0, 98, 255);
+ color: #000;
+ text-align: center;
 }
 
 .dataDiv {
   height: 96px;
   width: 98%;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
+
+  /* opacity: 0.6; */
   border-radius: 5px;
   border: 1px solid rgb(0, 0, 0);
 display: flex;
@@ -33,31 +36,31 @@ align-items: center;
   justify-content: space-around;
   align-items: center;
 }
-#convert
- {
+#convert{
   width: 97%;
   height: 19%;
   background-color: rgb(0, 98, 255);
 border: none;
   border-radius: 5px;
-  color: white;
+  color: rgb(170, 211, 214);
 }
 
 #swap {
   color: white;
   height: 2rem;
   width: 6rem;
-  position: absolute;
-  top: 102px;
+
+  top: 189px;
   background-color: rgb(0, 98, 255);
 border: 2px solid white;
   border-radius: 8px;
+  
 }
 
 #main {
 
   margin-top: 4rem;
-  background-color: rgba(255, 255, 255, 0.3); 
+  background-color: rgba(255, 255, 255, 0.2); 
   backdrop-filter: blur(10px); 
   -webkit-backdrop-filter: blur(10px); 
  border-radius: 5px;
@@ -88,4 +91,18 @@ padding: 1px;
 span{
   margin-left: 5px;
   margin-right: 5px;
+}
+@media (max-width:590px) {
+body{
+background-size: cover;
+}
+#main{
+  
+  width: 99%;
+  height: 400px;
+
+}
+h1{
+text-align: center;
+}
 }

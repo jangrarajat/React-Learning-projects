@@ -1,0 +1,199 @@
+
+
+a{
+ margin: 2rem;
+text-decoration: none;
+font-family: Arial, Helvetica, sans-serif;
+font-size: larger;
+font-weight: 900;
+color: white;
+
+}
+a:hover{
+  color: tomato;
+
+}
+#navbar{
+  background-color: rgb(144, 0, 255) ;
+  width: window;
+  height: 4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+#loginBtn{
+ width: 6rem;
+ height: 2rem;
+ border-radius: 5px;
+ border: none;
+}
+#loginBtn:hover{
+background-color:tomato;
+}
+
+*{
+margin: 0;
+padding: 0;
+}
+
+h1{
+  color: white;
+}
+#header{
+  width: 100%;
+  height: 60px;
+  color: white;
+  background-color: rgb(144, 0, 255);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-family: Arial, Helvetica, sans-serif;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.605);
+}
+ul{
+  display: flex;
+  flex-direction: row;
+
+
+}
+li{
+  margin-left: 30px;
+  font-weight: 900;
+  list-style: none;
+}
+li:hover{
+cursor: pointer;
+color: yellow;
+
+}
+h1{
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: x-large;
+  font-weight: 900;
+}
+#home{
+  padding: 40px;
+  width: window;
+  min-height:14rem;
+  background-color: rgb(255, 255, 255); 
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 10px;
+
+}
+#createBtn{
+  cursor: pointer;
+  height: 6rem;
+  width:  6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.322);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(144, 0, 255, 0.231);
+}
+#createBtn:hover{
+ background-color: rgba(255, 255, 0, 0.434);
+}
+
+
+
+#footer{
+  width: 100%;
+  height: 14rem;
+  background-color:rgb(144, 0, 255) ;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+
+}
+#footerUl{
+  flex-direction: column;
+  color: wheat;
+  padding: 25px;
+}
+#footerDiv{
+  width: 20%;
+  height: 100%;
+  padding: 2.3rem;
+ 
+}
+
+#homeHeading{
+  width: 100%;
+  color:gray;
+}
+
+#logo{
+  height: 80%;
+  width: 6rem;
+  border-radius: 5px;
+}
+
+button{
+width: 5rem;
+height: 2rem;
+border-radius: 5px ;
+border: none;
+padding: 4px;
+margin: 3px;
+}
+button:hover{
+  background-color: yellow;
+}
+
+#contact{
+  height: 25rem;
+  width: window;
+  border: 1px solid black;
+  display: flex;
+}
+#imgBox{
+height: 100%;
+width: 50%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+#inputBox{
+height: 100%;
+width: 50%;
+display: flex;
+justify-content: center;
+flex-direction: column;
+
+}
+input{
+  height: 3rem;
+  width: 20rem;
+  padding-left: 1rem;
+  border: 1px solid rgb(144, 0, 255) ;
+  border-radius: 5px;
+}
+input:hover{
+    border: 1px solid rgb(0, 0, 0);
+}
+#submit{
+    height: 3rem;
+  width: 21rem;
+margin: 5px;
+  background-color: rgb(144, 0, 255) ;
+}
+#submit:hover{
+  background-color: rgba(144, 0, 255, 0.779) ;
+}
+p{
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: 10px;
+  margin-top: 10px;
+}
