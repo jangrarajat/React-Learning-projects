@@ -99,3 +99,24 @@ li {
 #editInput:active{
   border: none;
 }
+
+.taskPageBtn{
+  width: 49%;
+}
+
+#taskInput{
+  width: 70%;
+  height: 2rem;
+  padding-left: 1rem;
+}
+#inputForm{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#completedUl{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

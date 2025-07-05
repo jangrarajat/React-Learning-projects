@@ -8,16 +8,16 @@ import CompletedTask from './Components/CompletedTask';
 function App() {
   const [inputText, setInputText] = useState([])
   const [completedTasks, setCompletedTasks] = useState([])
-  const [taskLenth,setTaskLenth  ]=useState(0)
-  const [completLenth,setCompletLenth]=useState(0)
+  const [taskLenth, setTaskLenth] = useState(0)
+  const [completLenth, setCompletLenth] = useState(0)
+  const [page, setPage] = useState(true)
   let liLenth = inputText.length
-
   let completedLenth = completedTasks.length
- 
-  useEffect(()=>{
-     setTaskLenth(liLenth)
-     setCompletLenth(completedLenth)
-  },[inputText,completedTasks])
+
+  useEffect(() => {
+    setTaskLenth(liLenth)
+    setCompletLenth(completedLenth)
+  }, [inputText, completedTasks])
 
   function handelInputData(e) {
     e.preventDefault()
@@ -26,8 +26,8 @@ function App() {
       alert('Enter task')
     }
     else {
-      let data = [...inputText, e.target.inputText.value ]
-          // createdAt: new Date().toLocaleTimeString()
+      let data = [...inputText, e.target.inputText.value]
+      // createdAt: new Date().toLocaleTimeString()
       setInputText(data)
       e.target.inputText.value = ''
     }
@@ -74,26 +74,50 @@ function App() {
       <div id='box'>
 
         <h1>Todo</h1>
-          <h2>Your tasks {taskLenth}</h2>
-           <h2>Your completed tasks {completLenth}</h2>
-        <form onSubmit={handelInputData}>
-          <input type="text" name='inputText' placeholder='Enter Task' style={{ height: 33, paddingLeft: 10 }} />
-          <button ><IoAddCircle /></button>
+        <div style={{ display: 'flex', width: 'window', justifyContent: 'space-evenly' }}>
+          <button
+            className='taskPageBtn'
+            onClick={() => { page ? non : setPage(true) }}
 
-        </form>
+          >All Taks {taskLenth}
+          </button>
+
+          <button
+            className='taskPageBtn'
+            onClick={() => { page ? setPage(false) : non }}
+          >Completed Tasks {completLenth}
+          </button>
+        </div>
+        <hr />
+        {page ?
+          (<>
+
+            <form
+            id='inputForm'
+             onSubmit={handelInputData}>
+              <input type="text" name='inputText' placeholder='Enter Task' id='taskInput' />
+              <button ><IoAddCircle /></button>
+
+            </form>
+            <ul id='taskUl'>
+              {taskLi}
+            </ul>
+          </>) :
+
+          (
+            <>
+              
+                <h2 style={{ textDecoration: 'underline' }}>Completed Task</h2>
+
+                <ul id='completedUl'>
+                  {completedLi}
+                </ul>
+              
+            </>
+
+          )}
 
 
-        <ul id='taskUl'>
-          {taskLi}
-        </ul>
-
-        <footer>
-          <h2 style={{ textDecoration: 'underline' }}>Completed Task</h2>
-         
-          <ul>
-            {completedLi}
-          </ul>
-        </footer>
       </div>
 
     </>
