@@ -82,41 +82,52 @@ li {
 
 }
 
+
+
 .list {
   width: 100%;
 }
 
-#editInput{
+#editInput {
   padding-left: 10px;
   border: none;
   height: 54px;
   text-wrap: wrap;
   background-color: transparent;
 }
-#editInput:focus{
-  border: none;
-}
-#editInput:active{
+
+#editInput:focus {
   border: none;
 }
 
-.taskPageBtn{
+#editInput:active {
+  border: none;
+}
+
+.taskPageBtn {
   width: 49%;
 }
 
-#taskInput{
+#taskInput {
   width: 70%;
   height: 2rem;
   padding-left: 1rem;
 }
-#inputForm{
+
+#inputForm {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
-#completedUl{
+
+#completedUl {
+  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+#completedLi{
+width: 98%;
 }
