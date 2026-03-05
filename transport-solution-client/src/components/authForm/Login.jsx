@@ -24,10 +24,12 @@ function Login({ setAuthForm }) {
 
         try {
             setLoading(true)
-            const response = await axios.post(`${import.meta.env.VITE_URL}/user/login`, { email, password })
+            const response = await axios.post(`${import.meta.env.VITE_URL}/user/login`, { email, password }, {
+                withCredentials: true  
+            })
             console.log(response.data.responseUser)
             setUser(response.data.responseUser)
-            localStorage.setItem("user", response.data.responseUser)
+            localStorage.setItem("transportUser", JSON.stringify(response.data.responseUser))
             setToast({
                 id: Date.now(),
                 show: true,

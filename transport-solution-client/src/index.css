@@ -1,3 +1,159 @@
- @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Container and Page setup */
+.bill-page-wrapper {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #525659;
+  min-height: 100vh;
+}
+
+/* Input Panel Styling */
+.input-panel {
+  background: #fff;
+  max-width: 900px;
+  margin: 0 auto 20px;
+  padding: 20px;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.input-panel input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.print-btn {
+  grid-column: span 3;
+  padding: 15px;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.print-btn:hover {
+  background: #219150;
+}
+
+/* Invoice Box Styling */
+.invoice-box {
+  width: 210mm;
+  min-height: 100mm;
+  padding: 1mm;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #000;
+  box-sizing: border-box;
+}
+
+.main-table {
+  width: 100%;
+  height: auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 2px solid #000;
+}
+
+.main-table td {
+  border: 1px solid black;
+  padding: 2px;
+  font-size: 11px;
+  vertical-align: top;
+}
+
+/* Header Text Styles */
+.spiritual-logo { font-size: 40px; }
+.email-text { font-size: 8px; }
+.header-title { font-size: 28px; font-weight: 900; text-align: center; margin: 0; }
+.sub-header { text-align: center; font-size: 10px; margin-bottom: 5px; }
+.bold-center { text-align: center; font-weight: bold; }
+.bg-black { background: #000; color: #fff; padding: 2px 5px; }
+.address-text { text-align: center; font-size: 9px; }
+.driver-info { font-size: 10px; }
+
+/* Content Specific */
+.hindi-note { font-size: 9px; line-height: 1.2; }
+.inner-table { width: 100%; border-collapse: collapse; }
+.consignee-cell { font-size: 14px; }
+.underline-text { text-decoration: underline; font-weight: bold; }
+.signature-row { height: 60px; }
+.signature-row td { vertical-align: bottom !important; }
+
+/* =========================================
+   PERFECT PRINT SETTINGS (A4 - 2 COPIES)
+   ========================================= */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0 !important; /* Margins zero karega */
+  }
+
+  html, body {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important; /* Scrollbars hata dega */
+    background-color: white !important;
+  }
+
+  ::-webkit-scrollbar { display: none !important; }
+
+  .bill-page-wrapper {
+    width: 210mm !important;
+    /* Height ko max-content ya exact page height de taki extra overflow avoid ho */
+    height: 297mm !important; 
+    max-height: 297mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    /* Top aur bottom padding kam kar di hai taki fit hone ki jagah mile */
+    padding: 1mm 1mm !important; 
+    box-sizing: border-box !important;
+    background-color: transparent !important;
+    page-break-after: avoid !important; /* Extra page rokne ke liye */
+  }
+
+  /* Ek Bilty ko page ke aade hisse me set karne ke liye container */
+  .bilty-print-container {
+    height: 150mm !important; /* Height thodi aur kam (140mm) */
+    width: 100% !important;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    /* Scale ko 0.88 kiya taaki niche signatures bilkul na katein */
+    transform: scale(0.88) !important; 
+    transform-origin: top center !important;
+    page-break-inside: avoid !important; /* Table ko tootne se bachayega */
+  }
+
+  .print-divider {
+    border-top: 1px dashed #000 !important;
+    width: 100% !important;
+    /* Divider ke upar niche ka gap kam kar diya */
+    margin: 0.1mm 0 !important; 
+  }
+
+  .invoice-box {
+    width: 100% !important;
+    min-height: auto !important;
+    border: none !important;
+  }
+
+  /* Screen wale buttons print se hatane ke liye */
+  .print-hidden, .lucide, button, header, footer, .no-print {
+    display: none !important;
+  }
+}

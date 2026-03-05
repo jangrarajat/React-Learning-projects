@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
     // Login function
     const login = () => {
-        setUser("Rajat");
+        setUser("");
     };
 
     // Logout function

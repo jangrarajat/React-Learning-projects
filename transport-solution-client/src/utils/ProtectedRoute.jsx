@@ -1,17 +1,19 @@
-import { Navigate } from "react-router-dom"
-import { useAuth } from "../context/AuthContext"
+import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
- 
-  const user = localStorage.getItem("user")
-
-  if (!user) {
-    return <Navigate to="/auth" replace />
-  } else {
-    return <Navigate to="/" replace />
+// 1. Dashboard ko protect karne ke liye
+export const ProtectedRoute = ({ children }) => {
+  const transportUser = JSON.parse(localStorage.getItem("transportUser"));
+  if (!transportUser) {
+    return <Navigate to="/auth" replace />;
   }
-
   return children;
-}
+};
 
-export default ProtectedRoute
+// 2. Auth page ko protect karne ke liye (Logged in user wapas login na dekh sake)
+export const PublicRoute = ({ children }) => {
+  const transportUser = JSON.parse(localStorage.getItem("transportUser"));
+  if (transportUser) {
+    return <Navigate to="/" replace />;
+  }
+  return children;
+};
