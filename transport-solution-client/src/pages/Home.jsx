@@ -43,33 +43,13 @@ function Home() {
 
   const transportUser = JSON.parse(localStorage.getItem("transportUser")) || {};
 
-  // Premium Check for Bilty
-  const handleNewBiltyClick = () => {
-    const isExpired = transportUser.subscriptionEndDate && new Date() > new Date(transportUser.subscriptionEndDate);
-    if (!transportUser.isPremium && transportUser.biltyCount >= 5) {
-      setIsPricingOpen(true);
-    } else if (transportUser.isPremium && isExpired) {
-      setIsPricingOpen(true);
-    } else {
-      setIsModalOpen(true);
-    }
-  };
-
-  // Premium Check for Expenses
-  const handleNewExpenseClick = () => {
-    const isExpired = transportUser.subscriptionEndDate && new Date() > new Date(transportUser.subscriptionEndDate);
-    if (!transportUser.isPremium || isExpired) {
-      setIsPricingOpen(true);
-    } else {
-      setIsExModalOpen(true);
-    }
-  };
-
+  // Notification Handler
   const showNotification = (success, msg) => {
     setToast({ show: true, success, msg, id: Date.now() });
     setTimeout(() => setToast(prev => ({ ...prev, show: false })), 5000);
   };
 
+  // API Functions
   const getDashboardData = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:5000/user/dashbord?filter=${dashFilter}`, { withCredentials: true });
@@ -131,6 +111,54 @@ function Home() {
     } finally { setLoading(false); }
   }, [selectedYear, selectedMonth, exTitle, searchTerm]);
 
+  // FULL UPDATED FUNCTION: API call for updating petrol pump payment status
+  const handleUpdatePayment = async (id, currentStatus) => {
+    // Toggle status: agar 'payed' hai toh 'unpayed', warna 'payed'
+    const newStatus = currentStatus === "payed" ? "unpayed" : "payed";
+    
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/bill/update-petrolpump-payment/${id}?payment=${newStatus}`, 
+        {}, 
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        showNotification(true, `Payment marked as ${newStatus}!`);
+        getPetrolPumps(currentPage); // Refresh table data
+      }
+    } catch (error) {
+      console.error("Update Error:", error);
+      if (error.response?.status === 401) {
+        const isRefreshed = await refreshToken();
+        if (isRefreshed) handleUpdatePayment(id, currentStatus);
+      } else {
+        showNotification(false, "Failed to update payment status.");
+      }
+    }
+  };
+
+  // Premium Check Handlers
+  const handleNewBiltyClick = () => {
+    const isExpired = transportUser.subscriptionEndDate && new Date() > new Date(transportUser.subscriptionEndDate);
+    if (!transportUser.isPremium && transportUser.biltyCount >= 5) {
+      setIsPricingOpen(true);
+    } else if (transportUser.isPremium && isExpired) {
+      setIsPricingOpen(true);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleNewExpenseClick = () => {
+    const isExpired = transportUser.subscriptionEndDate && new Date() > new Date(transportUser.subscriptionEndDate);
+    if (!transportUser.isPremium || isExpired) {
+      setIsPricingOpen(true);
+    } else {
+      setIsExModalOpen(true);
+    }
+  };
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (menuOption === "home") getDashboardData();
@@ -152,7 +180,7 @@ function Home() {
       <AddExpenseModal isOpen={isExModalOpen} onClose={() => setIsExModalOpen(false)} onSuccess={(msg) => { getExpenses(1); showNotification(true, msg); }} onError={(msg) => showNotification(false, msg)} />
       <Pricing isOpen={isPricingOpen} onClose={() => setIsPricingOpen(false)} />
 
-      {/* Sidebar Responsive */}
+      {/* Sidebar */}
       <aside className={`${sidebarOpen ? "translate-x-0 w-64" : "-translate-x-full w-0 md:translate-x-0 md:w-20"} fixed md:relative z-50 h-full bg-slate-900 text-white transition-all duration-300 flex flex-col shadow-2xl`}>
         <div className="p-5 flex items-center justify-between border-b border-slate-800">
           {(sidebarOpen || window.innerWidth < 768) && <span className="font-black text-lg text-blue-400 tracking-tighter uppercase">SAWARIYA.</span>}
@@ -181,7 +209,7 @@ function Home() {
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Header Responsive */}
+        {/* Header */}
         <header className="h-20 bg-white border-b flex items-center justify-between px-4 md:px-8 shrink-0 shadow-sm">
           <div className="flex items-center gap-4">
             <button className="md:hidden p-2 bg-slate-100 rounded-lg" onClick={() => setSidebarOpen(true)}><Menu size={20} /></button>
@@ -191,7 +219,6 @@ function Home() {
         </header>
 
         <main className="p-4 md:p-10 overflow-y-auto grow bg-gray-50/50">
-          {/* Dashboard View */}
           {menuOption === "home" && (
             <div className="space-y-8 animate-in fade-in duration-500">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -221,92 +248,62 @@ function Home() {
             </div>
           )}
 
-          {/* Bilty View */}
           {menuOption === "biltiy" && (
-            <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
-              <div className="flex flex-col xl:flex-row justify-between items-stretch xl:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-1">
+            <div className="space-y-4">
+              <div className="flex flex-col xl:flex-row justify-between items-stretch gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <div className="flex flex-col sm:flex-row items-stretch gap-3 flex-1">
                   <div className="relative flex-1 max-w-md">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                    <input
-                      type="text"
-                      placeholder="Search LR, DI, Vehicle, Name..."
-                      className="w-full pl-10 pr-4 py-2 border rounded-lg text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                    <input type="text" placeholder="Search LR, DI, Vehicle..." className="w-full pl-10 pr-4 py-2 border rounded-lg text-xs font-bold outline-none" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                   </div>
                   <div className="flex gap-2">
-                    <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="flex-1 border rounded-lg px-4 py-2 text-xs font-bold bg-gray-50 outline-none">{years.map(y => <option key={y} value={y}>{y}</option>)}</select>
-                    <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} className="flex-1 border rounded-lg px-4 py-2 text-xs font-bold bg-gray-50 outline-none">{months.map(m => <option key={m.value} value={m.value}>{m.name}</option>)}</select>
+                    <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)} className="border rounded-lg px-4 py-2 text-xs font-bold bg-gray-50">{years.map(y => <option key={y} value={y}>{y}</option>)}</select>
+                    <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)} className="border rounded-lg px-4 py-2 text-xs font-bold bg-gray-50">{months.map(m => <option key={m.value} value={m.value}>{m.name}</option>)}</select>
                   </div>
                 </div>
-                <button onClick={handleNewBiltyClick} className="bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center justify-center gap-2 text-xs font-black uppercase shadow-lg active:scale-95 duration-200">
-                  <Plus size={18} /> New Bilty
-                </button>
+                <button onClick={handleNewBiltyClick} className="bg-blue-600 text-white px-6 py-2.5 rounded-xl flex items-center gap-2 text-xs font-black uppercase shadow-lg"><Plus size={18} /> New Bilty</button>
               </div>
-              <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
-                 <BiltyTable data={biltyData} loading={loading} setIsModalOpen={setIsModalOpen} />
-              </div>
+              <BiltyTable data={biltyData} loading={loading} setIsModalOpen={setIsModalOpen} />
             </div>
           )}
 
-          {/* Petrol Pump View */}
-          {menuOption === "petrolPump" && (
-            <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
+          {menuOption === "petrolPump" && (    
+            <div className="space-y-4">
                <div className="flex items-center gap-3 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                   <select value={selectedYear} onChange={(e)=>setSelectedYear(e.target.value)} className="border rounded-lg px-4 py-2 text-xs font-bold bg-gray-50">{years.map(y => <option key={y} value={y}>{y}</option>)}</select>
                   <select value={selectedMonth} onChange={(e)=>setSelectedMonth(e.target.value)} className="border rounded-lg px-4 py-2 text-xs font-bold bg-gray-50">{months.map(m => <option key={m.value} value={m.value}>{m.name}</option>)}</select>
                 </div>
-              <div className="overflow-x-auto">
-                 <PetrolPumpTable data={pumpData} loading={loading} />
-              </div>
+               {/* Fixed: onUpdatePayment prop passed properly */}
+               <PetrolPumpTable data={pumpData} loading={loading} onUpdatePayment={handleUpdatePayment} />
             </div>
           )}
 
-          {/* Expenses View */}
           {menuOption === "expantion" && (
-            <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
-              <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+            <div className="space-y-6">
+              <div className="flex flex-col lg:flex-row justify-between items-stretch gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                 <div className="flex flex-col sm:flex-row gap-3 flex-1">
                   <div className="relative flex-1 max-w-xs">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                    <input 
-                      type="text" 
-                      placeholder="Search Purpose..." 
-                      className="w-full pl-10 pr-4 py-2 border rounded-xl text-xs font-bold outline-none"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                    <input type="text" placeholder="Search Purpose..." className="w-full pl-10 pr-4 py-2 border rounded-xl text-xs font-bold" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <select value={exTitle} onChange={(e)=>setExTitle(e.target.value)} className="border rounded-xl px-4 py-2 text-xs font-black uppercase bg-white outline-none">
-                      <option value="">All Expenses</option>
-                      <option value="salary">Salary Only</option>
-                      <option value="bills">Office Bills</option>
-                      <option value="other">Others</option>
-                    </select>
-                    <select value={selectedYear} onChange={(e)=>setSelectedYear(e.target.value)} className="border rounded-xl px-4 py-2 text-xs font-black uppercase bg-white outline-none">{years.map(y => <option key={y} value={y}>{y}</option>)}</select>
-                    <select value={selectedMonth} onChange={(e)=>setSelectedMonth(e.target.value)} className="border rounded-xl px-4 py-2 text-xs font-black uppercase bg-white outline-none">{months.map(m => <option key={m.value} value={m.value}>{m.name}</option>)}</select>
+                    <select value={exTitle} onChange={(e)=>setExTitle(e.target.value)} className="border rounded-xl px-4 py-2 text-xs font-black uppercase bg-white"><option value="">All Expenses</option><option value="salary">Salary</option><option value="bills">Bills</option><option value="other">Others</option></select>
+                    <select value={selectedYear} onChange={(e)=>setSelectedYear(e.target.value)} className="border rounded-xl px-4 py-2 text-xs font-black uppercase bg-white">{years.map(y => <option key={y} value={y}>{y}</option>)}</select>
+                    <select value={selectedMonth} onChange={(e)=>setSelectedMonth(e.target.value)} className="border rounded-xl px-4 py-2 text-xs font-black uppercase bg-white">{months.map(m => <option key={m.value} value={m.value}>{m.name}</option>)}</select>
                   </div>
                 </div>
-                <button onClick={handleNewExpenseClick} className="bg-slate-900 text-white px-6 py-3 rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest shadow-xl active:scale-95 duration-200">
-                  <Plus size={16}/> New Expense
-                </button>
+                <button onClick={handleNewExpenseClick} className="bg-slate-900 text-white px-6 py-3 rounded-xl flex items-center gap-2 text-[10px] font-black uppercase shadow-xl"><Plus size={16}/> New Expense</button>
               </div>
-              <div className="overflow-x-auto">
-                 <ExpenseTable data={expenseData} loading={loading} />
-              </div>
+              <ExpenseTable data={expenseData} loading={loading} />
             </div>
           )}
 
-          {/* Pagination */}
           {menuOption !== "home" && (
-            <div className="flex items-center justify-between bg-white px-6 py-4 mt-6 rounded-2xl border shadow-sm border-slate-200">
+            <div className="flex items-center justify-between bg-white px-6 py-4 mt-6 rounded-2xl border shadow-sm">
               <p className="text-[10px] font-black uppercase text-slate-400">Page {currentPage} of {totalPages}</p>
               <div className="flex gap-2">
-                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="p-2 border rounded-xl hover:bg-slate-50 disabled:opacity-20 transition-all duration-200"><ChevronLeft size={18} /></button>
-                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="p-2 border rounded-xl hover:bg-slate-50 disabled:opacity-20 transition-all duration-200"><ChevronRight size={18} /></button>
+                <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)} className="p-2 border rounded-xl disabled:opacity-20"><ChevronLeft size={18} /></button>
+                <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)} className="p-2 border rounded-xl disabled:opacity-20"><ChevronRight size={18} /></button>
               </div>
             </div>
           )}
